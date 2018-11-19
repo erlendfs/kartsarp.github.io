@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DDD Fedback</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://js.arcgis.com/4.9/"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+      }
+      #u_0_0 {
+        width:auto;
+      }
+
+      #viewDiv {
+        float: left;
+        padding: 0;
+        margin: 0;
+        height: -webkit-calc(100% - 70px);
+        height: -moz-calc(100% - 70px);
+        height: calc(100% - 70px);
+        width: 100%;
+      }
+      #comment{
+        float: left;
+        height: 100%;
+        width: 28%;
+      }
+      #knapp_esc, #knapp_opn {
+        pointer-events: auto;
+        font-size: x-large;
+        text-align: center;
+        border: 1px solid #dfdfdf;
+        background: white;
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        z-index: 9000;
+        box-shadow: 1px 1px 1px grey;
+        line-height: normal;
+      }
+      #knapp_esc{
+        bottom: -40px;
+      }
+      #knapp_opn {
+        right: 0px;
+        background-image: 'layers.png';
+      }
+      #knapp_esc:hover {
+        cursor: pointer;
+      }
+      #knapp_opn:hover {
+        cursor: pointer;
+      }
+
+      .cont {
+        height: 100%;
+        width: 70%;
+        float: left;
+      }
+      #tittel {
+        height: 70px;
+        background-color: #007aad;
+      }
+      .flex-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #navn {
+        width: 70%;
+        height: 100%;
+        float: left;
+        font-size: xx-large;
+        font-family: sans-serif;
+        color: white;
+      }
+      .lenker {
+        width: 30%;
+        height: 100%;
+        float: left;
+        font-size: large;
+        font-family: sans-serif;
+        color: black;
+      }
+      #navn {
+
+        /* Internet Explorer 10 */
+        display:-ms-flexbox;
+        -ms-flex-pack:center;
+        -ms-flex-align:center;
+
+        /* Firefox */
+        display:-moz-box;
+        -moz-box-pack:center;
+        -moz-box-align:center;
+
+        /* Safari, Opera, and Chrome */
+        display:-webkit-box;
+        -webkit-box-pack:center;
+        -webkit-box-align:center;
+
+        /* W3C */
+        display:box;
+        box-pack:center;
+        box-align:center;
+      }
+
+      img {
+        vertical-align: unset;
+      }
+
+      .planknapp {
+        float: right;
+        margin-right: 20px;
+        margin-top: 14px;
+
+
+      }
+
+
+
+
+
+      /* On screens that are 992px or less, set the background color to blue */
+      @media screen and (max-width: 992px) {
+        .cont {
+          height: 65%;
+          width: 100%;
+          float: left;
+        }   
+        #comment{
+          float: left;
+          height: 35%;
+          width: 100%;
+        }
+      }
+
+      /* On screens that are 600px or less, set the background color to olive */
+      @media screen and (max-width: 600px) {
+        .cont {
+          height: 60%;
+          width: 100%;
+          float: left;
+        }
+
+        #comment{
+          height: 40%;
+          width: 100%;
+        }
+      }
+
+
+
+
+  </style>
+  <script type="text/javascript">
+    $(function() {
+      require([
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/SceneLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/LayerList"
+      ], function(WebScene, SceneView, SceneLayer, Legend, LayerList) {
+
+
+
+        var webscene = new WebScene({
+          portalItem: {
+            id: "7cc83e9889a74c408d480331ae1c63dc"
+          }
+
+        });
+
+        var view = new SceneView({
+          container: "viewDiv",
+          map: webscene
+        });
+
+        view.when(function() {
+          var layerList = new LayerList({
+                  view: view
+          });
+          view.ui.add(layerList, "top-right");
+          let hoyde = $(".esri-ui-top-right").height();
+          console.log(hoyde);
+          $(".esri-ui-top-right").hide();
+          $(".esri-ui-top-right").append("<div id='knapp_esc'>&times;</div>");
+          $(".esri-ui-corner-container").append("<div id='knapp_opn'><img src='layerlist.svg'/></div>")
+
+
+
+          $("#knapp_esc").on('click', function(){
+            $(".esri-ui-top-right").hide(); 
+            $("#knapp_opn").show();
+
+            
+          });
+          $("#knapp_opn").on('click', function(){
+            $(".esri-ui-top-right").show();
+            $("#knapp_opn").hide();
+          });
+
+        });
+      });
+
+      
+
+    });
+    
+  </script>
+</head>
+<body>
+
+  <script>
+    function statusChangeCallback(response) {
+      console.log('statusChangeCallback');
+      console.log(response);
+      // The response object is returned with a status field that lets the
+      // app know the current login status of the person.
+      // Full docs on the response object can be found in the documentation
+      // for FB.getLoginStatus().
+      if (response.status === 'connected') {
+        // Logged into your app and Facebook.
+        testAPI();
+      } else {
+        // The person is not logged into your app or we are unable to tell.
+        document.getElementById('status').innerHTML = 'Please log ' +
+          'into this app.';
+      }
+    };
+
+    function checkLoginState() {
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '768866340121542',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v3.2'
+      });
+        
+      FB.AppEvents.logPageView();   
+        
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+
+    function testAPI() {
+      console.log('Welcome!  Fetching your information.... ');
+      FB.api('/me', function(response) {
+        console.log('Successful login for: ' + response.name);
+        document.getElementById('status').innerHTML =
+          'Thanks for logging in, ' + response.name + '!';
+      });
+    }
+
+
+
+
+
+
+
+
+  </script>
+
+  <div class="cont">
+    <div id="tittel" class="flex-container">
+      <div id="navn" class="flex-item">Grålum Allé</div>
+
+      <div class="lenker flex-item">
+        <a class="planknapp" href='http://tema.webatlas.no/sarpsborg/planinnsyn?planid=22076' target="_blank">
+          <button  class="w3-button w3-white w3-border-white w3-round-large" >Plandokumenter</button>
+        </a>
+      </div>
+
+    </div>
+    <div id="viewDiv"></div>
+  </div>
+  
+
+  </div>
+  <div id="comment">
+    
+    <fb:login-button 
+      scope="public_profile,email"
+      onlogin="checkLoginState();">
+    </fb:login-button>
+
+    <div id="status">
+    </div>
+  </div>
+
+</body>
+</html>
